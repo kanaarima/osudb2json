@@ -28,10 +28,12 @@ def read_db(args):
             jsondata.append(jsonbeatmap)
         except:
             print("Couldn't process map! " + repr(beatmap))
-    indent = 4 if args["pretty"] else 0
     with open(args["output"], "w") as f:
-        json.dump(jsondata, f, indent=indent)
-
+        if args["pretty"]:
+            json.dump(jsondata, f, indent=4)
+        else:
+            json.dump(jsondata, f
+)
 if __name__ == "__main__":
     args = {"database": "osu.db", "output": "osu.json", "metadata": True, "map_info": True, "id": True, "sort_by_id": True, "pretty": False}
     if len(sys.argv) == 1:
