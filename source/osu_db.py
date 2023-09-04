@@ -6,7 +6,9 @@ from kaitaistruct import KaitaiStruct, KaitaiStream, BytesIO
 
 
 if parse_version(kaitaistruct.__version__) < parse_version('0.9'):
-    raise Exception("Incompatible Kaitai Struct Python API: 0.9 or later is required, but you have %s" % (kaitaistruct.__version__))
+    raise Exception(
+        f"Incompatible Kaitai Struct Python API: 0.9 or later is required, but you have {kaitaistruct.__version__}"
+    )
 
 import vlq_base128_le
 class OsuDb(KaitaiStruct):
@@ -197,7 +199,7 @@ class OsuDb(KaitaiStruct):
             if hasattr(self, '_m_value'):
                 return self._m_value if hasattr(self, '_m_value') else None
 
-            self._m_value = (False if self.byte == 0 else True)
+            self._m_value = self.byte != 0
             return self._m_value if hasattr(self, '_m_value') else None
 
 
@@ -215,11 +217,11 @@ class OsuDb(KaitaiStruct):
 
         def _read(self):
             self.magic1 = self._io.read_bytes(1)
-            if not self.magic1 == b"\x08":
+            if self.magic1 != b"\x08":
                 raise kaitaistruct.ValidationNotEqualError(b"\x08", self.magic1, self._io, u"/types/int_double_pair/seq/0")
             self.int = self._io.read_s4le()
             self.magic2 = self._io.read_bytes(1)
-            if not self.magic2 == b"\x0D":
+            if self.magic2 != b"\x0D":
                 raise kaitaistruct.ValidationNotEqualError(b"\x0D", self.magic2, self._io, u"/types/int_double_pair/seq/2")
             self.double = self._io.read_f8le()
 
